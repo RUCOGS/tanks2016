@@ -1,4 +1,4 @@
-Last Change: 8/9/16
+Last Change: 8/10/16
 
 Tank Assets:
 This folder currently contains a blender file With Mesh Assets for the tank.
@@ -18,10 +18,14 @@ List of Meshes in the file:
 	a Mesh comprising the gun turret.I plan to rig the turret with bones so that it can be animated easily.
 
 5)Tank_Turret_Simple
-	a Mesh comprising a simple gun turret. This one is not rigged and is a simpler alternative to the other turret if rigging and animation is too much work.  
+	a Mesh comprising a simple gun turret. This one is not rigged and is a simpler alternative to the other turret if rigging and animation is too much work.
+	  
 
 4) Tank_shell 
 	Mesh for the Tank's projectile.
+
+8/10/16: Added .fbx versions of the Tank.blend file, Tank.fbx. This format is accepted by unity,
+	but the scale and rotation of the meshes might need tweaking when they get dragged into the scene.
 
 
    
