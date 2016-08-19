@@ -22,13 +22,5 @@ public class Turret_P2 : MonoBehaviour {
                 transform.Rotate(Vector3.back, Space.Self);
             }
         }
-        if (Input.GetKey("right"))
-        {
-            transform.Rotate(Vector3.up, Space.World);
-        }
-        if (Input.GetKey("left"))
-        {
-            transform.Rotate(Vector3.down, Space.World);
-        }
     }
 }

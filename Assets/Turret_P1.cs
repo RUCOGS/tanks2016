@@ -17,13 +17,5 @@ public class Turret_P1 : MonoBehaviour {
         {
             transform.Rotate(Vector3.down, Space.World);
         }
-        if (Input.GetKey("w"))
-        {
-             
-        }
-        if (Input.GetKey("s"))
-        {
-            transform.Translate(Vector3.right * 0.1F, Space.Self);
-        }
     }
 }
