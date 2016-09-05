@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/william/Will's_Level.unity
-  isLoaded: 1
-  isActive: 1
