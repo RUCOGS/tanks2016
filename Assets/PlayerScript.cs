@@ -21,15 +21,111 @@ public class PlayerScript : NetworkBehaviour {
     int reloadtime1 = 0;
     // Use this for initialization
     public Camera cam;
+    public static int players;
+    public Material blue;
+    public Material green;
+    public Material yellow;
+    int playernum;
+    public bool dead=false;
+
+    [ClientRpc]
+    public void RpcDeath()
+    {
+        if (transform.GetChild(0).transform.GetChild(6).gameObject.activeSelf)
+        {
+            transform.GetChild(0).transform.GetChild(7).gameObject.SetActive(true);
+            transform.GetChild(0).transform.GetChild(7).transform.position = transform.GetChild(0).transform.position+Vector3.down*2F;
+            transform.GetChild(0).transform.GetChild(7).transform.parent = null;
+            transform.GetChild(0).transform.GetChild(6).gameObject.SetActive(false);
+        }
+        transform.GetChild(0).gameObject.SetActive(false);
+    }
+
+    [ClientRpc]
+    public void RpcRevive()
+    {
+        transform.GetChild(0).gameObject.SetActive(true);
+    }
+
+    [ClientRpc]
+    public void RpcFlag(Material x)
+    {
+        Material[] mats = transform.GetChild(0).transform.GetChild(6).transform.GetChild(1).transform.GetComponent<Renderer>().materials;
+        mats[0] = blue;
+        transform.GetChild(0).transform.GetChild(6).transform.GetChild(1).transform.GetComponent<Renderer>().materials = mats;
+    }
+
+    [Command]
+    void CmdFire1()
+    {
+        var bullet = (GameObject)Instantiate(bullet1, transform.GetChild(0).transform.GetChild(3).transform.GetChild(4).transform.position, transform.GetChild(0).transform.GetChild(3).transform.GetChild(4).transform.rotation);
+        NetworkServer.Spawn(bullet);
+    }
+
+    [Command]
+    void CmdFire2()
+    {
+        tempb = (GameObject)Instantiate(bullet2, transform.GetChild(0).transform.position, transform.GetChild(0).transform.rotation);
+        tempb.transform.Translate(new Vector3(-3, -.75F, -.75F));
+        NetworkServer.Spawn(tempb);
+        tempb = (GameObject)Instantiate(bullet2, transform.GetChild(0).transform.position, transform.GetChild(0).transform.rotation);
+        tempb.transform.Translate(new Vector3(-3, -.75F, .75F));
+        NetworkServer.Spawn(tempb);
+    }
+
     void Start () {
+        players += 1;
+        playernum = players;
+        transform.GetChild(0).transform.GetChild(6).gameObject.SetActive(false);
+        if (playernum == 2)
+        {
+            Material[] mats = transform.GetChild(0).transform.GetChild(1).GetComponent<Renderer>().materials;
+            mats[3] = blue;
+            transform.GetChild(0).transform.GetChild(1).GetComponent<Renderer>().materials = mats;
+            transform.GetChild(0).transform.GetChild(3).transform.GetChild(1).GetComponent<Renderer>().material = blue;
+            transform.GetChild(0).transform.GetChild(5).GetComponent<Renderer>().material = blue;
+            mats = transform.GetChild(2).transform.GetChild(1).GetComponent<Renderer>().materials;
+            mats[0] = blue;
+            transform.GetChild(2).transform.GetChild(1).GetComponent<Renderer>().materials = mats;
+            mats = transform.GetChild(2).transform.GetChild(3).transform.GetChild(1).GetComponent<Renderer>().materials;
+            mats[0] = blue;
+            transform.GetChild(2).transform.GetChild(3).transform.GetChild(1).GetComponent<Renderer>().materials = mats;
+        }
+        if (playernum == 3)
+        {
+            Material[] mats = transform.GetChild(0).transform.GetChild(1).GetComponent<Renderer>().materials;
+            mats[3] = green;
+            transform.GetChild(0).transform.GetChild(1).GetComponent<Renderer>().materials = mats;
+            transform.GetChild(0).transform.GetChild(3).transform.GetChild(1).GetComponent<Renderer>().material = green;
+            transform.GetChild(0).transform.GetChild(5).GetComponent<Renderer>().material = green;
+            mats = transform.GetChild(2).transform.GetChild(1).GetComponent<Renderer>().materials;
+            mats[0] = green;
+            transform.GetChild(2).transform.GetChild(1).GetComponent<Renderer>().materials = mats;
+            mats = transform.GetChild(2).transform.GetChild(3).transform.GetChild(1).GetComponent<Renderer>().materials;
+            mats[0] = green;
+            transform.GetChild(2).transform.GetChild(3).transform.GetChild(1).GetComponent<Renderer>().materials = mats;
+        }
+        if (playernum == 4)
+        {
+            Material[] mats = transform.GetChild(0).transform.GetChild(1).GetComponent<Renderer>().materials;
+            mats[3] = yellow;
+            transform.GetChild(0).transform.GetChild(1).GetComponent<Renderer>().materials = mats;
+            transform.GetChild(0).transform.GetChild(3).transform.GetChild(1).GetComponent<Renderer>().material = yellow;
+            transform.GetChild(0).transform.GetChild(5).GetComponent<Renderer>().material = yellow;
+            mats = transform.GetChild(2).transform.GetChild(1).GetComponent<Renderer>().materials;
+            mats[0] = yellow;
+            transform.GetChild(2).transform.GetChild(1).GetComponent<Renderer>().materials = mats;
+            mats = transform.GetChild(2).transform.GetChild(3).transform.GetChild(1).GetComponent<Renderer>().materials;
+            mats[0] = yellow;
+            transform.GetChild(2).transform.GetChild(3).transform.GetChild(1).GetComponent<Renderer>().materials = mats;
+        }
         startloc = transform.GetChild(0).position;
         if (isLocalPlayer) { return; }
         cam.enabled = false;
 	}
-    //Collision detection
-    
-    // Update is called once per frame
-    void Update () {
+	
+	// Update is called once per frame
+	void Update () {
         if (!isLocalPlayer) { return; }
         //Main Camera
         dis = Trace.transform.position - transform.GetChild(1).transform.position;
@@ -58,10 +154,7 @@ public class PlayerScript : NetworkBehaviour {
             }
             if (Input.GetKeyDown("space") && reloadtime2 == 0)
             {
-                tempb = (GameObject)Instantiate(bullet2, transform.GetChild(0).transform.position, transform.GetChild(0).transform.rotation);
-                tempb.transform.Translate(new Vector3(-3, -.75F, -.75F));
-                tempb = (GameObject)Instantiate(bullet2, transform.GetChild(0).transform.position, transform.GetChild(0).transform.rotation);
-                tempb.transform.Translate(new Vector3(-3, -.75F, .75F));
+                CmdFire2();
                 reloadtime2 = 250;
             }
             //Turret_P1
@@ -103,17 +196,17 @@ public class PlayerScript : NetworkBehaviour {
             }
             if (Input.GetKeyDown("return") && reloadtime1 == 0)
             {
-                Instantiate(bullet1, transform.GetChild(0).transform.GetChild(3).transform.GetChild(4).transform.position, transform.GetChild(0).transform.GetChild(3).transform.GetChild(4).transform.rotation);
+                CmdFire1();
                 reloadtime1 = 150;
             }
         }
         else
         {
             deathcd += 1;
-            if (deathcd >= 900)
+            if (deathcd >= 900 && !dead)
             {
                 deathcd = 0;
-                transform.GetChild(0).gameObject.SetActive(true);
+                RpcRevive();
                 transform.GetChild(0).position = startloc;
             }
         }

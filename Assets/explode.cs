@@ -19,7 +19,16 @@ public class explode : NetworkBehaviour {
     {
         if (other.transform.tag == "Player")
         {
-            other.gameObject.SetActive(false);
+            /*if (other.transform.GetChild(6).gameObject.activeSelf)
+            {
+                other.transform.GetChild(7).gameObject.SetActive(true);
+                other.transform.GetChild(7).transform.position = other.transform.position+Vector3.down*2F;
+                other.transform.GetChild(7).parent = null;
+                other.transform.GetChild(6).gameObject.SetActive(false);
+            }
+            other.gameObject.SetActive(false);*/
+            //Destroy(other.gameObject);
+            other.transform.parent.gameObject.GetComponent<PlayerScript>().RpcDeath();
         }
     }
 }

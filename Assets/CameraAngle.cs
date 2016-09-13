@@ -3,8 +3,8 @@ using System.Collections;
 
 public class CameraAngle : MonoBehaviour {
     public GameObject Trace;
-    new Vector3 dis;
-    new float rot;
+    Vector3 dis;
+    float rot;
 	// Use this for initialization
 	void Start () {
 	
